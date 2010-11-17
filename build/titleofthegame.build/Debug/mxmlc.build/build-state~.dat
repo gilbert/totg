@@ -1,0 +1,32 @@
+Tmxmlc
+v7
+r0
+t305350227.035583
+cCheck dependencies
+cExternalBuildToolExecution mxmlc
+
+N/Developer/SDKs/flex_sdk_4.1/bin/mxmlc
+c000000004BEB2FFA000000000000059A
+t1273704442
+s1434
+
+CCheck dependencies
+r0
+lSLF07#2@18"Check dependencies305350225#305350225#0(0"0(0#1#0"4375320#0"0#
+
+CExternalBuildToolExecution mxmlc
+s305350225.124699
+e305350227.035045
+r0
+xExternalBuildToolExecution
+xmxmlc
+oLoading configuration file /Developer/SDKs/flex_sdk_4.1/frameworks/flex-config.xml
+oAdobe Flex Compiler (mxmlc)
+oVersion 4.1.0 build 16076
+oCopyright (c) 2004-2009 Adobe Systems, Inc. All rights reserved.
+o
+oError: unable to open 'ETitleOfTheGame.as'
+o
+oUse 'mxmlc -help' for information about using the command line.
+lSLF07#2@23"Run external build tool305350225#305350227#0(382"Loading configuration file /Developer/SDKs/flex_sdk_4.1/frameworks/flex-config.xmlAdobe Flex Compiler (mxmlc)Version 4.1.0 build 16076Copyright (c) 2004-2009 Adobe Systems, Inc. All rights reserved.Error: unable to open 'ETitleOfTheGame.as'Use 'mxmlc -help' for information about using the command line.Command /Developer/SDKs/flex_sdk_4.1/bin/mxmlc failed with exit code 17(13@83"Loading configuration file /Developer/SDKs/flex_sdk_4.1/frameworks/flex-config.xml305350226#0#83#0(1@0"0(13@28"Adobe Flex Compiler (mxmlc)305350226#83#28#0(1@0"0(13@26"Version 4.1.0 build 16076305350226#111#26#0(1@0"0(13@65"Copyright (c) 2004-2009 Adobe Systems, Inc. All rights reserved.305350226#137#65#0(1@0"0(13@43"Error: unable to open 'ETitleOfTheGame.as'305350226#203#43#0(1@0"0(13@64"Use 'mxmlc -help' for information about using the command line.305350226#247#64#0(1@0"0(4@70"Command /Developer/SDKs/flex_sdk_4.1/bin/mxmlc failed with exit code 1305350227#4294967295#0#0(1@0"0(0#0#0"4375320#132"    cd /Users/gilbertbrandongarza/p/titleofthegame    setenv ACTION     /Developer/SDKs/flex_sdk_4.1/bin/mxmlc ETitleOfTheGame.as1#
+
