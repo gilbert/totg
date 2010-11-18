@@ -18,6 +18,7 @@ package engine.totg {
 			bgColor = 0xff00ff6e;
 
 			layerMain = new FlxTilemap();
+			layerMain.collideIndex = 15;
 			layerMain.loadMap(new CSV_Main, Img_Main,40,40);
 			layerMain.x = 0;
 			layerMain.y = 0;
