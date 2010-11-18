@@ -26,10 +26,10 @@ package engine.totg
 			facing = DOWN;
 			
 			//bounding box tweaks
-			width = 30;
-			height = 30;
-			offset.x = 0;
-			offset.y = 0;
+			width = 19;
+			height = 25;
+			offset.x = 5;
+			offset.y = 2;
 			/**/
 			
 			//player stats
@@ -113,6 +113,11 @@ package engine.totg
         play("idle");
         facing = DOWN;
       }
+      
+      if(!flickering() && FlxG.keys.justPressed("C")){
+        
+      }
+      
 			/**/
 			
 			/*/ANIMATION
