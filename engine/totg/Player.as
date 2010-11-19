@@ -19,6 +19,8 @@ package engine.totg
 		public var mpMax:uint;
 		public var mpBar:StatBar;
 		
+		public var attacks:FlxGroup;
+		
 		public function Player(X:int,Y:int)
 		{
 			super(X,Y);
@@ -62,6 +64,7 @@ package engine.totg
 			/*/Gibs emitted upon death
 			_gibs = Gibs;
 			/**/
+			attacks = new FlxGroup();
 		}
 		
 		override public function update():void
@@ -140,13 +143,53 @@ package engine.totg
 			/**/
 			
 			//SHOOTING
-			if(!flickering() && FlxG.keys.justPressed("C"))
+			if(!flickering() && FlxG.keys.justPressed("A"))
 			{
 				// action stuff goes here
+				var bXVel:int = 0;
+				var bYVel:int = 0;
+				var bX:int = x;
+				var bY:int = y;
+				if(facing == UP)
+				{
+					bY -= 4;
+					bYVel = -10;
+				}
+				else if(facing == DOWN)
+				{
+					bY += height - 4;
+					bYVel = 10;
+				}
+				else if(facing == RIGHT)
+				{
+					bX += width - 4;
+					bXVel = 10;
+				}
+				else
+				{
+					bX -= 4;
+					bXVel = -10;
+				}
+				
+        var attack:Projectile = new Projectile({
+          kill: makeKillHook()
+        });
+        attack.shoot(bX,bY,bXVel,bYVel);
+        attacks.add(attack);
 			}
 				
 			//UPDATE POSITION AND ANIMATION
 			super.update();
+			
+      // update current attacks
+      attacks.update();
+		}
+		
+		override public function render():void
+		{
+		  // render current attacks
+	    super.render();
+	    attacks.render();
 		}
 		
 		override public function hitBottom(Contact:FlxObject,Velocity:Number):void
@@ -172,6 +215,17 @@ package engine.totg
 		override public function kill():void
 		{
 			
+		}
+		
+		public function makeKillHook():Function {
+		  var self:Player = this;
+		  return function(attack:Projectile):void {
+		    self.doneWithAttack(attack);
+		  }
+		}
+		
+		private function doneWithAttack(a:Projectile):void {
+		  attacks.remove(a,true);
 		}
 	}
 }

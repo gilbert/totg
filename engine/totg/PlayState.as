@@ -51,6 +51,7 @@ public class PlayState extends FlxState
 		//collisions with environment
     /*FlxU.collide(_blocks,_objects);*/
     _map.layerMain.collide(player);
+    _map.layerMain.collide(player.attacks);
 		FlxU.overlap(_enemiesGroup,player,overlapped);
 		FlxU.overlap(_p_attacks,_enemies,overlapped);
 	}
