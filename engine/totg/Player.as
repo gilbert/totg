@@ -6,8 +6,6 @@ package engine.totg
 	{
 		[Embed(source="../../content/textures/actors/hat-walk.png")]
 		private var ImgHatWalk:Class;
-		[Embed(source="../../content/textures/effects/attack.png")]
-		private var ImgAttack:Class;
 
 		//private var _bullets:Array;
 		//private var _up:Boolean;
@@ -46,20 +44,12 @@ package engine.totg
 			hpBar = new StatBar(4,4,0xffff0000);
 			mpBar = new StatBar(4,16,0xff0000ff);
 			
-			addAnimation("idle", [0,1], 2);
+			addAnimation("idle-down", [0,1], 2);
+			addAnimation("idle-side", [2,3], 2);
+			addAnimation("idle-up", [4,5], 2);
 			addAnimation("walk-down", [0,1], 8);
 			addAnimation("walk-side", [2,3], 8);
 			addAnimation("walk-up", [4,5], 8);
-			
-			/*/animations
-			addAnimation("idle", [0]);
-			addAnimation("run", [1, 2, 3, 0], 12);
-			addAnimation("jump", [4]);
-			addAnimation("idle_up", [5]);
-			addAnimation("run_up", [6, 7, 8, 5], 12);
-			addAnimation("jump_up", [9]);
-			addAnimation("jump_down", [10]);
-			/**/
 			
 			/*/Gibs emitted upon death
 			_gibs = Gibs;
@@ -113,34 +103,14 @@ package engine.totg
 			}
 			
 			if(!FlxG.keys.LEFT && !FlxG.keys.RIGHT && !FlxG.keys.UP && !FlxG.keys.DOWN){
-        play("idle");
-        facing = DOWN;
+			  if(facing == RIGHT || facing == LEFT) play('idle-side');
+			  else if(facing == UP) play('idle-up');
+			  else play('idle-down');
       }
       
       if(!flickering() && FlxG.keys.justPressed("C")){
         
       }
-      
-			/**/
-			
-			/*/ANIMATION
-			if(velocity.y != 0)
-			{
-				if(_up) play("jump_up");
-				else if(_down) play("jump_down");
-				else play("jump");
-			}
-			else if(velocity.x == 0)
-			{
-				if(_up) play("idle_up");
-				else play("idle");
-			}
-			else
-			{
-				if(_up) play("run_up");
-				else play("run");
-			}
-			/**/
 			
 			//SHOOTING
 			if(!flickering() && FlxG.keys.justPressed("A"))
@@ -153,28 +123,24 @@ package engine.totg
 				if(facing == UP)
 				{
 					bY -= 4;
-					bYVel = -10;
 				}
 				else if(facing == DOWN)
 				{
 					bY += height - 4;
-					bYVel = 10;
 				}
 				else if(facing == RIGHT)
 				{
 					bX += width - 4;
-					bXVel = 10;
 				}
 				else
 				{
-					bX -= 4;
-					bXVel = -10;
+					bX -= width - 4;
 				}
 				
-        var attack:Projectile = new Projectile({
+        var attack:Projectile = Projectile.create('slash',{
           kill: makeKillHook()
         });
-        attack.shoot(bX,bY,bXVel,bYVel);
+        attack.fire(bX,bY,facing);
         attacks.add(attack);
 			}
 				
