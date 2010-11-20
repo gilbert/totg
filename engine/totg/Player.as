@@ -10,11 +10,11 @@ package engine.totg
 		//private var _bullets:Array;
 		//private var _up:Boolean;
 		public var runSpeed:uint;
-		public var hp:uint;
-		public var hpMax:uint;
+		public var hp:int;
+		public var hpMax:int;
 		public var hpBar:StatBar;
-	  public var mp:uint;
-		public var mpMax:uint;
+	  public var mp:int;
+		public var mpMax:int;
 		public var mpBar:StatBar;
 		
 		public var attacks:FlxGroup;
@@ -22,7 +22,7 @@ package engine.totg
 		public function Player(X:int,Y:int)
 		{
 			super(X,Y);
-			loadGraphic(ImgHatWalk,true,true,30);
+			loadGraphic(ImgHatWalk,true,false,30);
 			facing = DOWN;
 			
 			//bounding box tweaks
@@ -45,11 +45,15 @@ package engine.totg
 			mpBar = new StatBar(4,16,0xff0000ff);
 			
 			addAnimation("idle-down", [0,1], 2);
-			addAnimation("idle-side", [2,3], 2);
-			addAnimation("idle-up", [4,5], 2);
+			addAnimation("idle-right", [2,3], 2);
+			addAnimation("idle-left", [4,5], 2);
+			addAnimation("idle-up", [6,7], 2);
+			
 			addAnimation("walk-down", [0,1], 8);
-			addAnimation("walk-side", [2,3], 8);
-			addAnimation("walk-up", [4,5], 8);
+			addAnimation("walk-right", [2,3], 8);
+			addAnimation("walk-left", [4,5], 8);
+			addAnimation("walk-up", [6,7], 8);
+			facing = LEFT;
 			
 			/*/Gibs emitted upon death
 			_gibs = Gibs;
@@ -91,19 +95,20 @@ package engine.totg
 				facing = LEFT;
         /*_flipped = false;*/
 				
-				play("walk-side");
+				play("walk-left");
 				velocity.x = -runSpeed;
 			}
 			else if(FlxG.keys.RIGHT){
 				facing = RIGHT;
         /*_flipped = true;*/
 				
-				play("walk-side");
+				play("walk-right");
 				velocity.x = runSpeed;
 			}
 			
 			if(!FlxG.keys.LEFT && !FlxG.keys.RIGHT && !FlxG.keys.UP && !FlxG.keys.DOWN){
-			  if(facing == RIGHT || facing == LEFT) play('idle-side');
+			  if(facing == LEFT) play('idle-left');
+			  else if(facing == RIGHT) play('idle-right');
 			  else if(facing == UP) play('idle-up');
 			  else play('idle-down');
       }
@@ -122,19 +127,20 @@ package engine.totg
 				var bY:int = y;
 				if(facing == UP)
 				{
-					bY -= 4;
+					bY -= 0;
 				}
 				else if(facing == DOWN)
 				{
-					bY += height - 4;
+					bY += height;
 				}
 				else if(facing == RIGHT)
 				{
-					bX += width - 4;
+					bX += width;
 				}
-				else
+				else if(facing == LEFT)
 				{
-					bX -= width - 4;
+				  // we subtract here because of weird stuff with sprite flipping
+					bX -= 0;
 				}
 				
         var attack:Projectile = Projectile.create('slash',{
