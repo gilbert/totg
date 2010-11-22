@@ -53,7 +53,6 @@ package engine.totg
 			addAnimation("walk-right", [2,3], 8);
 			addAnimation("walk-left", [4,5], 8);
 			addAnimation("walk-up", [6,7], 8);
-			facing = LEFT;
 			
 			/*/Gibs emitted upon death
 			_gibs = Gibs;

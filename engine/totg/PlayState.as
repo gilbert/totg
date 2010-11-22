@@ -4,8 +4,11 @@ import engine.flixel.*;
 public class PlayState extends FlxState
 {
 	
+	public static var player:Player;
+	
 	private var _map:MapForestyForestOfForestry;
-	public var player:Player;
+	
+	protected var _player:Player;
 	
 	protected var _enemies:FlxGroup;
 	protected var _e_attacks:FlxGroup;
@@ -32,14 +35,15 @@ public class PlayState extends FlxState
 		
 		this.add(_enemies);
 		
-		player = new Player(0,0);
-		this.add(player);
-		//this.add(player.hpBar);
-		//this.add(player.mpBar);
+		_player = new Player(50,50);
+		this.add(_player);
+		PlayState.player = _player;
+		//this.add(_player.hpBar);
+		//this.add(_player.mpBar);
 		
 		this.add(_e_attacks);
 		
-		FlxG.follow(player);
+		FlxG.follow(_player);
 		FlxG.followBounds(_map.boundsMinX, _map.boundsMinY, _map.boundsMaxX, _map.boundsMaxY);
 		
 		_enemies.add(Enemy.create('spider',250,50,{}));
@@ -53,10 +57,11 @@ public class PlayState extends FlxState
 		
 		//collisions with environment
     /*FlxU.collide(_blocks,_objects);*/
-    _map.layerMain.collide(player);
-    _map.layerMain.collide(player.attacks);
-		FlxU.overlap(_enemiesGroup,player,overlapped);
-		FlxU.overlap(player.attacks,_enemies,overlapped);
+    _map.layerMain.collide(_player);
+    _map.layerMain.collide(_enemies);
+    _map.layerMain.collide(_player.attacks);
+		FlxU.overlap(_enemiesGroup,_player,overlapped);
+		FlxU.overlap(_player.attacks,_enemies,overlapped);
 	}
 	
 	protected function overlapped(Object1:FlxObject,Object2:FlxObject):void
