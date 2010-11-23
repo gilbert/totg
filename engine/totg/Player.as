@@ -2,7 +2,7 @@ package engine.totg
 {
 	import engine.flixel.*;
 
-	public class Player extends FlxSprite
+	public class Player extends Actor
 	{
 		[Embed(source="../../content/textures/actors/hat-walk.png")]
 		private var ImgHatWalk:Class;
@@ -10,18 +10,14 @@ package engine.totg
 		//private var _bullets:Array;
 		//private var _up:Boolean;
 		public var runSpeed:uint;
-		public var hp:int;
-		public var hpMax:int;
 		public var hpBar:StatBar;
-	  public var mp:int;
-		public var mpMax:int;
 		public var mpBar:StatBar;
 		
 		public var attacks:FlxGroup;
 		
-		public function Player(X:int,Y:int)
+		public function Player(X:int,Y:int,hooks:Object = null)
 		{
-			super(X,Y);
+			super(X,Y,hooks);
 			loadGraphic(ImgHatWalk,true,false,30);
 			facing = DOWN;
 			
@@ -161,26 +157,6 @@ package engine.totg
 		  // render current attacks
 	    super.render();
 	    attacks.render();
-		}
-		
-		override public function hitBottom(Contact:FlxObject,Velocity:Number):void
-		{
-			
-		}
-		
-		override public function hurt(Damage:Number):void
-		{
-			/*Damage = 0;
-			     if(flickering())
-			       return;
-			     FlxG.play(SndHurt);
-			     flicker(1.3);
-			     if(FlxG.score > 1000) FlxG.score -= 1000;
-			     if(velocity.x > 0)
-			       velocity.x = -maxVelocity.x;
-			     else
-			       velocity.x = maxVelocity.x;
-			     super.hurt(Damage);*/
 		}
 		
 		override public function kill():void

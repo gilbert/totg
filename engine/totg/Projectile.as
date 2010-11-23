@@ -27,6 +27,7 @@ package engine.totg
 		protected var hooks:Object;
 		public var speed:int;
 		public var power:int;
+		public var knockback:int;
 		public var duration:int;
 		
     // Default projectile, deals no damage.
@@ -42,6 +43,7 @@ package engine.totg
 			
 			speed = 10;
 			power = 0;
+			knockback = 0;
 			duration = 999;
 			
 			width = 5;
@@ -64,11 +66,13 @@ package engine.totg
 		{
 			super.render();
 		}
-
-		override public function hitRight(Contact:FlxObject,Velocity:Number):void { kill(); }
-		override public function hitLeft(Contact:FlxObject,Velocity:Number):void { kill(); }
-		override public function hitBottom(Contact:FlxObject,Velocity:Number):void { kill(); }
-		override public function hitTop(Contact:FlxObject,Velocity:Number):void { kill(); }
+    
+    public function hitActor(actor:Actor):void { kill(); }
+    
+		override public function hitRight(Contact:FlxObject,Velocity:Number):void { hook('hit'); }
+		override public function hitLeft(Contact:FlxObject,Velocity:Number):void { hook('hit'); }
+		override public function hitBottom(Contact:FlxObject,Velocity:Number):void { hook('hit'); }
+		override public function hitTop(Contact:FlxObject,Velocity:Number):void { hook('hit'); }
 		
 		override public function kill():void
 		{
@@ -96,6 +100,7 @@ package engine.totg
 			x += dims.posOffset.x;
 			y += dims.posOffset.y;
 			
+			this.facing = facing;
 			switch(facing){
 			  case LEFT:  velocity.x = -speed; play('fire-left'); break;
 			  case RIGHT: velocity.x = speed; play('fire-right'); break;
@@ -113,6 +118,7 @@ package engine.totg
 }
 
 import engine.totg.*;
+import engine.flixel.*;
 
 class Slash extends Projectile
 {
@@ -122,6 +128,7 @@ class Slash extends Projectile
   public function Slash(hooks:Object)
   {
     super(hooks);
+    this.hooks['hit'] = hitHook;
     
     width = 12;
 		height = 29;
@@ -144,5 +151,26 @@ class Slash extends Projectile
     speed = 160;
     power = 5;
     duration = 15;
+    knockback = 200;
+  }
+  
+  override public function hitActor(actor:Actor):void
+  {
+    if(actor.flickering()) return;
+    actor.hurt(this.power);
+    
+    var variance:Number = Math.ceil(Math.random() * (knockback / 2));
+    switch(facing){
+      case LEFT:  actor.push(-knockback,variance); break;
+      case RIGHT: actor.push(knockback,variance); break;
+      case UP:    actor.push(variance,-knockback); break;
+      case DOWN:  actor.push(variance,knockback); break;
+    }
+    this.kill();
+  }
+  
+  public function hitHook(self:Projectile):void
+  {
+    self.kill();
   }
 }

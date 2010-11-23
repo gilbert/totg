@@ -2,7 +2,7 @@ package engine.totg
 {
 	import engine.flixel.*;
 
-	public class Enemy extends FlxSprite
+	public class Enemy extends Actor
 	{
     public static function create(type:String,X:int,Y:int,hooks:Object):Enemy
     {
@@ -15,13 +15,6 @@ package engine.totg
     // instance vars
     //
 		public var power:int;
-		public var hp:int;
-		public var hpMax:int;
-		
-		// An object of functions that take this projectile as its parameter
-		// List of available hooks:
-		//   kill, hit
-		protected var hooks:Object;
 		
 		public var speed:Number;
 		
@@ -33,10 +26,9 @@ package engine.totg
     //
 		public function Enemy(X:int,Y:int,hooks:Object)
 		{
-			super(X,Y);
+			super(X,Y,hooks);
 			
-			this.ai_move = AI.movement();
-			this.hooks = hooks;
+			this.ai_move = AI.movement('chill');
 			
 			createGraphic(16,16);
 			
@@ -56,9 +48,7 @@ package engine.totg
 		
 		override public function update():void
 		{
-		  if(!dead){
-		    ai_move();
-		  }
+		  ai_move();
 			super.update();
 		}
 		
@@ -67,30 +57,11 @@ package engine.totg
 			super.render();
 		}
 		
-		// reduces incoming damage based on armor, defense, etc
-		//
-		override public function hurt(dmg:Number):void
-		{
-		  if(flickering()) return;
-		  hp -= dmg;
-		  flicker(0.2);
-		  if(hp < 0) hp = 0;
-		  if(hp == 0) kill();
-		}
-		
 		override public function kill():void
 		{
 			if(dead) return;
-			velocity.x = 0;
-			velocity.y = 0;
-			dead = true;
-			solid = false;
-
-			hook('kill');
-		}
-		
-		public function hook(name:String):void {
-		  if(hooks[name]) hooks[name](this);
+			ai_move = AI.movement('chill');
+			super.kill();
 		}
 	}
 }

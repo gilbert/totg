@@ -68,8 +68,8 @@ public class PlayState extends FlxState
 	{
     if(Object1 is Projectile && Object2 is Enemy){
       var p:Projectile = Object1 as Projectile;
-      Object2.hurt(p.power);
-      p.kill();
+      var e:Enemy = Object2 as Enemy;
+      p.hitActor(e);
     }
 	}
 	

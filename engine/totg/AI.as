@@ -19,7 +19,14 @@ package engine.totg
     {
       var player:Player = PlayState.player;
       return function():void {
-        return;
+        var tempForce:Object = tempVector;
+        
+        tempForce.x = 0;
+      	tempForce.y = 0;
+      	
+        VMath.subtract(tempForce,this.velocity);
+      	this.velocity.x += Math.max( Math.min(tempForce.x,this.speed), -this.speed );
+      	this.velocity.y += Math.max( Math.min(tempForce.y,this.speed), -this.speed );
       }
     }
     
@@ -29,12 +36,15 @@ package engine.totg
       return function():void {
         var tempForce:Object = tempVector;
         
-        tempForce.x = (player.x + (player.width>>1)) - (this.x + (this.width>>1));
+        tempForce.x = (player.x + (player.width>>1)) - (this.x + (this.width>>1)); // desired velocity
       	tempForce.y = (player.y + (player.height>>1)) - (this.y + (this.height>>1));
       	
       	VMath.normalize(tempForce);
-      	this.velocity.x = tempForce.x * this.speed;
-      	this.velocity.y = tempForce.y * this.speed;
+      	tempForce.x *= this.speed;
+      	tempForce.y *= this.speed;
+        VMath.subtract(tempForce,this.velocity);
+      	this.velocity.x += Math.max( Math.min(tempForce.x,this.speed), -this.speed );
+      	this.velocity.y += Math.max( Math.min(tempForce.y,this.speed), -this.speed );
       }
     }
   }
