@@ -159,7 +159,7 @@ class Slash extends Projectile
     if(actor.flickering()) return;
     actor.hurt(this.power);
     
-    var variance:Number = Math.ceil(Math.random() * (knockback / 2));
+    var variance:Number = Math.ceil(Math.random() * knockback * 2 - knockback);
     switch(facing){
       case LEFT:  actor.push(-knockback,variance); break;
       case RIGHT: actor.push(knockback,variance); break;
