@@ -35,7 +35,7 @@ package engine.totg
 		}
 		public function get hpMax():int { return _hpMax; }
 		public function set hpMax(val:int):void {
-		  _hpMax = Math.max(val,0);
+		  _hpMax = Math.max(val,1);
 		  _hp = Math.min(_hpMax,_hp);
 		}
 		
@@ -46,7 +46,7 @@ package engine.totg
 		}
 		public function get mpMax():int { return _mpMax; }
 		public function set mpMax(val:int):void {
-		  _mpMax = Math.max(val,0);
+		  _mpMax = Math.max(val,1);
 		  _mp = Math.min(_mpMax,_mp);
 		}
 		
@@ -57,7 +57,7 @@ package engine.totg
 		}
 		public function get apMax():int { return _apMax; }
 		public function set apMax(val:int):void {
-		  _apMax = Math.max(val,0);
+		  _apMax = Math.max(val,1);
 		  _ap = Math.min(_apMax,_ap);
 		}
 		
@@ -84,9 +84,23 @@ package engine.totg
 			hook('kill');
 		}
 		
+		override public function update():void
+		{
+		  for(var key:String in attacks){
+        attacks[key].update();
+      }
+      projectiles.update();
+		  super.update();
+		}
+		
+		override public function render():void
+		{
+		  super.render();
+		  projectiles.render();
+		}
+		
 		public function push(xForce:Number,yForce:Number):void
 		{
-		  FlxG.log('pushing x:'+xForce+', y:'+yForce);
       // for some reason I feel like this function is needed
 		  velocity.x += xForce;
 		  velocity.y += yForce;

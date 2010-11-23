@@ -100,7 +100,6 @@ class Slash extends Attack
   override public function launch():void
   {
     if(overheat > 0) return;
-    FlxG.log('launched a slash attack!');
     // OPTIMIZE: instead of creating a new projectile
     // every time, store and use the same ones over and
     // over again

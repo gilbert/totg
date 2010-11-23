@@ -46,10 +46,12 @@ public class PlayState extends FlxState
 		FlxG.follow(_player);
 		FlxG.followBounds(_map.boundsMinX, _map.boundsMinY, _map.boundsMaxX, _map.boundsMaxY);
 		
-		for(var i:int=0;i<1;i++){
+		for(var i:int=0;i<5;i++){
 		  var ranX:int = Math.ceil(Math.random() * 500);
 		  var ranY:int = Math.ceil(Math.random() * 500);
-		  _enemies.add(Enemy.create('spider',ranX,ranY,{}));
+		  var e:Enemy = Enemy.create('spider',ranX,ranY,{})
+		  _enemies.add(e);
+		  _e_attacks.add(e.projectiles);
 		}
 	}
 		
@@ -62,16 +64,17 @@ public class PlayState extends FlxState
     _map.layerMain.collide(_player);
     _map.layerMain.collide(_enemies);
     _map.layerMain.collide(_player.projectiles);
-		FlxU.overlap(_enemiesGroup,_player,overlapped);
+		//FlxU.overlap(_enemiesGroup,_player,overlapped);
 		FlxU.overlap(_player.projectiles,_enemies,overlapped);
+		FlxU.overlap(_e_attacks,_player,overlapped);
 	}
 	
 	protected function overlapped(Object1:FlxObject,Object2:FlxObject):void
 	{
-    if(Object1 is Projectile && Object2 is Enemy){
+    if(Object1 is Projectile && Object2 is Actor){
       var p:Projectile = Object1 as Projectile;
-      var e:Enemy = Object2 as Enemy;
-      p.hitActor(e);
+      var a:Actor = Object2 as Actor;
+      p.hitActor(a);
     }
 	}
 	

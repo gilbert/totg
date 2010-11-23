@@ -52,10 +52,6 @@ package engine.totg
 		
 		override public function update():void
 		{
-		  move_ai();
-		  if(!dead){
-		    attack_ai('slash');
-		  }
 			super.update();
 		}
 		
@@ -100,6 +96,17 @@ class Spider extends Enemy
     
     speed = 20;
     power = 1;
+    
+    attacks['slash'] = Attack.create('slash',this);
+  }
+  
+  override public function update():void
+  {
+    move_ai();
+    if(!dead){
+	    attack_ai('slash');
+	  }
+	  super.update();
   }
   
   override public function kill():void

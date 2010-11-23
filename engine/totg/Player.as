@@ -19,6 +19,10 @@ package engine.totg
 			loadGraphic(ImgHatWalk,true,false,30);
 			facing = DOWN;
 			
+			//player stats HUD
+			hpBar = new StatBar(4,4,0xffff0000);
+			mpBar = new StatBar(4,16,0xff0000ff);
+			
 			//bounding box tweaks
 			width = 19;
 			height = 25;
@@ -33,10 +37,6 @@ package engine.totg
 			mp = mpMax;
 			runSpeed = 80;
 			/**/
-			
-			//player stats HUD
-			hpBar = new StatBar(4,4,0xffff0000);
-			mpBar = new StatBar(4,16,0xff0000ff);
 			
 			addAnimation("idle-down", [0,1], 2);
 			addAnimation("idle-right", [2,3], 2);
@@ -54,6 +54,12 @@ package engine.totg
 			attacks = {
 			  'slash': Attack.create('slash',this)
 			};
+		}
+		
+		override public function set hp(val:int):void {
+		  super.hp = val;
+		  // change hp stat bar
+		  this.hpBar.setScale(super.hp / super.hpMax);
 		}
 		
 		override public function update():void
@@ -110,23 +116,16 @@ package engine.totg
 			}
 				
 			super.update();
-			
-      for(var key:String in attacks){
-        attacks[key].update();
-      }
-      projectiles.update();
 		}
 		
 		override public function render():void
 		{
-		  // render current attacks
 	    super.render();
-	    projectiles.render();
 		}
 		
 		override public function kill():void
 		{
-			
+			super.kill();
 		}
 	}
 }
