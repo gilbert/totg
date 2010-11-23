@@ -19,7 +19,7 @@ package engine.totg
 		public function Actor(X:int,Y:int,hooks:Object)
 		{
 		  super(X,Y);
-		  this.hooks = hooks;
+		  this.hooks = hooks || {};
 		}
 		
     /* Boring but useful getters and setters */
