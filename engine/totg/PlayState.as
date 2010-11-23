@@ -41,8 +41,6 @@ public class PlayState extends FlxState
 		this.add(_player.hpBar);
 		//this.add(_player.mpBar);
 		
-		this.add(_e_attacks);
-		
 		FlxG.follow(_player);
 		FlxG.followBounds(_map.boundsMinX, _map.boundsMinY, _map.boundsMaxX, _map.boundsMaxY);
 		
