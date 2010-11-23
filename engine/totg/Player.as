@@ -13,8 +13,6 @@ package engine.totg
 		public var hpBar:StatBar;
 		public var mpBar:StatBar;
 		
-		public var attacks:FlxGroup;
-		
 		public function Player(X:int,Y:int,hooks:Object = null)
 		{
 			super(X,Y,hooks);
@@ -53,7 +51,9 @@ package engine.totg
 			/*/Gibs emitted upon death
 			_gibs = Gibs;
 			/**/
-			attacks = new FlxGroup();
+			attacks = {
+			  'slash': Attack.create('slash',this)
+			};
 		}
 		
 		override public function update():void
@@ -73,14 +73,12 @@ package engine.totg
 			velocity.y = 0;
       if(FlxG.keys.UP){
         facing = UP;
-        /*_flipped = false;*/
         
         if(!FlxG.keys.LEFT && !FlxG.keys.RIGHT) play("walk-up");
         velocity.y = -runSpeed;
       }
       else if(FlxG.keys.DOWN){
         facing = DOWN;
-        /*_flipped = false;*/
         
         if(!FlxG.keys.LEFT && !FlxG.keys.RIGHT) play("walk-down");
         velocity.y = runSpeed;
@@ -88,14 +86,12 @@ package engine.totg
       
       if(FlxG.keys.LEFT){
 				facing = LEFT;
-        /*_flipped = false;*/
 				
 				play("walk-left");
 				velocity.x = -runSpeed;
 			}
 			else if(FlxG.keys.RIGHT){
 				facing = RIGHT;
-        /*_flipped = true;*/
 				
 				play("walk-right");
 				velocity.x = runSpeed;
@@ -108,71 +104,29 @@ package engine.totg
 			  else play('idle-down');
       }
       
-      if(!flickering() && FlxG.keys.justPressed("C")){
-        
-      }
-			
-			//SHOOTING
 			if(!flickering() && FlxG.keys.justPressed("A"))
 			{
-				// action stuff goes here
-				var bXVel:int = 0;
-				var bYVel:int = 0;
-				var bX:int = x;
-				var bY:int = y;
-				if(facing == UP)
-				{
-					bY -= 0;
-				}
-				else if(facing == DOWN)
-				{
-					bY += height;
-				}
-				else if(facing == RIGHT)
-				{
-					bX += width;
-				}
-				else if(facing == LEFT)
-				{
-				  // we subtract here because of weird stuff with sprite flipping
-					bX -= 0;
-				}
-				
-        var attack:Projectile = Projectile.create('slash',{
-          kill: makeKillHook()
-        });
-        attack.fire(bX,bY,facing);
-        attacks.add(attack);
+				attacks['slash'].launch();
 			}
 				
-			//UPDATE POSITION AND ANIMATION
 			super.update();
 			
-      // update current attacks
-      attacks.update();
+      for(var key:String in attacks){
+        attacks[key].update();
+      }
+      projectiles.update();
 		}
 		
 		override public function render():void
 		{
 		  // render current attacks
 	    super.render();
-	    attacks.render();
+	    projectiles.render();
 		}
 		
 		override public function kill():void
 		{
 			
-		}
-		
-		public function makeKillHook():Function {
-		  var self:Player = this;
-		  return function(attack:Projectile):void {
-		    self.doneWithAttack(attack);
-		  }
-		}
-		
-		private function doneWithAttack(a:Projectile):void {
-		  attacks.remove(a,true);
 		}
 	}
 }

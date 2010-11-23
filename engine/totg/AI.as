@@ -15,6 +15,16 @@ package engine.totg
       }
     }
     
+    public static function attack(type:String = null):Function
+    {
+      switch(type){
+        case 'melee': return melee();
+        default: return peaceful();
+      }
+    }
+    
+    /* Movement AI functions */
+    
     private static function chill():Function
     {
       var player:Player = PlayState.player;
@@ -45,6 +55,26 @@ package engine.totg
         VMath.subtract(tempForce,this.velocity);
       	this.velocity.x += Math.max( Math.min(tempForce.x,this.speed), -this.speed );
       	this.velocity.y += Math.max( Math.min(tempForce.y,this.speed), -this.speed );
+      }
+    }
+    
+    /* Attack AI functions */
+    private static function peaceful():Function
+    {
+      var player:Player = PlayState.player;
+      return function():void {
+        return;
+      }
+    }
+    
+    private static function melee():Function
+    {
+      var player:Player = PlayState.player;
+      return function(projectileType:String):void {
+        var d2:Number = Math.pow(player.x - this.x,2) + Math.pow(player.y - this.y,2);
+        if(d2 < Math.pow(25,2)){
+          //FlxG.log(d2+' melee attack! '+player.x+','+player.y+' :: '+this.x+','+this.y);
+        }
       }
     }
   }
