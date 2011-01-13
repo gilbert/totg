@@ -52,7 +52,7 @@ package engine.totg
 			_gibs = Gibs;
 			/**/
 			attacks = {
-			  'slash': Attack.create('slash',this)
+        'slash': Attack.create('slash',this)
 			};
 		}
 		

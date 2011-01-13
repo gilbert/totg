@@ -8,6 +8,7 @@ package engine.totg
     {
       switch(type){
         case 'slash': return new Slash(hooks);
+        case 'swipe': return new Swipe(hooks);
         default: return new Projectile(hooks);
       }
     }
@@ -123,7 +124,7 @@ import engine.flixel.*;
 class Slash extends Projectile
 {
   [Embed(source="../../content/textures/effects/slash.png")]
-	private var ImgSlash:Class;
+	private var ImgProjectile:Class;
 	
   public function Slash(hooks:Object)
   {
@@ -135,6 +136,7 @@ class Slash extends Projectile
 		offset.x = 0;
 		offset.y = 0;
     
+    // posOffset is graphical position of sprite, offset is hitbox offset
     animDims = {
   	  (''+LEFT):  {width:12,height:29,posOffset:{x:-12,y:0},offset:{x:0,y:0}},
   	  (''+RIGHT): {width:12,height:29,posOffset:{x:0,y:0},offset:{x:0,y:0}},
@@ -142,7 +144,7 @@ class Slash extends Projectile
   	  (''+DOWN):  {width:30,height:12,posOffset:{x:-6,y:0},offset:{x:0,y:0}}
   	};
     
-    loadGraphic(ImgSlash,true);
+    loadGraphic(ImgProjectile,true);
     addAnimation('fire-right',[0], 1, false);
     addAnimation('fire-left',[1], 1, false);
     addAnimation('fire-up',[2], 1, false);
@@ -172,5 +174,62 @@ class Slash extends Projectile
   public function hitHook(self:Projectile):void
   {
     self.kill();
+  }
+}
+
+
+class Swipe extends Projectile
+{
+  [Embed(source="../../content/textures/effects/swipe.png")]
+	private var ImgProjectile:Class;
+	
+  public function Swipe(hooks:Object)
+  {
+    super(hooks);
+    this.hooks['hit'] = hitHook;
+    
+    width = 26;
+		height = 26;
+		offset.x = 0;
+		offset.y = 0;
+    
+    // posOffset affects the entire sprite (including hitbox), offset only affects hitbox
+    animDims = {
+  	  (''+LEFT):  {width:26,height:26,posOffset:{x:-27,y:0},offset:{x:21,y:14}},
+  	  (''+RIGHT): {width:26,height:26,posOffset:{x:0,y:0},offset:{x:0,y:14}},
+  	  (''+UP):    {width:26,height:26,posOffset:{x:-8,y:-24},offset:{x:14,y:14}},
+  	  (''+DOWN):  {width:26,height:26,posOffset:{x:-8,y:-4},offset:{x:0,y:14}}
+  	};
+    
+    loadGraphic(ImgProjectile,true);
+    addAnimation('fire-right',[0,1,2], 12, false);
+    addAnimation('fire-left',[3,4,5], 12, false);
+    addAnimation('fire-up',[3,4,5], 12, false);
+    addAnimation('fire-down',[0,1,2], 12, false);
+    
+    speed = 0;
+    power = 5;
+    duration = 15;
+    knockback = 200;
+  }
+  
+  override public function hitActor(actor:Actor):void
+  {
+    if(actor.flickering()) return;
+    actor.hurt(this.power);
+    
+    var variance:Number = Math.ceil(Math.random() * knockback * 2 - knockback);
+    switch(facing){
+      case LEFT:  actor.push(-knockback,variance); break;
+      case RIGHT: actor.push(knockback,variance); break;
+      case UP:    actor.push(variance,-knockback); break;
+      case DOWN:  actor.push(variance,knockback); break;
+    }
+    //this.kill();
+  }
+  
+  public function hitHook(self:Projectile):void
+  {
+    //self.kill();
   }
 }

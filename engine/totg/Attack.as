@@ -8,6 +8,7 @@ package engine.totg
     {
       switch(type){
         case 'slash': return new Slash(owner,hooks);
+        case 'swipe': return new Swipe(owner,hooks);
         default: FlxG.log('Error: bad attack type');
       }
       return null;
@@ -104,6 +105,37 @@ class Slash extends Attack
     // every time, store and use the same ones over and
     // over again
     var p:Projectile = Projectile.create('slash',{
+      kill: makeKillHook()
+    });
+    // added before firing because who knows, the fire method
+    // might instantly remove the projectile from the group
+    this.projectiles.add(p);
+    owner.projectiles.add(p);
+    
+    var point:FlxPoint = calcLaunchPoint();
+    p.fire(point.x,point.y,owner.facing);
+    
+    overheat += cooldown;
+  }
+  
+}
+
+class Swipe extends Attack
+{
+  
+  public function Swipe(owner:Actor,hooks:Object)
+  {
+    super(owner,hooks);
+    cooldown = 40;
+  }
+  
+  override public function launch():void
+  {
+    if(overheat > 0) return;
+    // OPTIMIZE: instead of creating a new projectile
+    // every time, store and use the same ones over and
+    // over again
+    var p:Projectile = Projectile.create('swipe',{
       kill: makeKillHook()
     });
     // added before firing because who knows, the fire method
